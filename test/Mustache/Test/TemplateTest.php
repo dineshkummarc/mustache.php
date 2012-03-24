@@ -12,35 +12,41 @@
 /**
  * @group unit
  */
-class Mustache_Test_TemplateTest extends PHPUnit_Framework_TestCase {
-	public function testConstructor() {
-		$mustache = new Mustache_Mustache;
-		$template = new Mustache_Test_TemplateStub($mustache);
-		$this->assertSame($mustache, $template->getMustache());
-	}
+class Mustache_Test_TemplateTest extends PHPUnit_Framework_TestCase
+{
+    public function testConstructor()
+    {
+        $mustache = new Mustache_Mustache;
+        $template = new Mustache_Test_TemplateStub($mustache);
+        $this->assertSame($mustache, $template->getMustache());
+    }
 
-	public function testRendering() {
-		$rendered = '<< wheee >>';
-		$mustache = new Mustache_Mustache;
-		$template = new Mustache_Test_TemplateStub($mustache);
-		$template->rendered = $rendered;
-		$context  = new Mustache_Context;
+    public function testRendering()
+    {
+        $rendered = '<< wheee >>';
+        $mustache = new Mustache_Mustache;
+        $template = new Mustache_Test_TemplateStub($mustache);
+        $template->rendered = $rendered;
+        $context  = new Mustache_Context;
 
-		$this->assertEquals($rendered, $template());
-		$this->assertEquals($rendered, $template->render());
-		$this->assertEquals($rendered, $template->renderInternal($context));
-		$this->assertEquals($rendered, $template->render(array('foo' => 'bar')));
-	}
+        $this->assertEquals($rendered, $template());
+        $this->assertEquals($rendered, $template->render());
+        $this->assertEquals($rendered, $template->renderInternal($context));
+        $this->assertEquals($rendered, $template->render(array('foo' => 'bar')));
+    }
 }
 
-class Mustache_Test_TemplateStub extends Mustache_Template {
-	public $rendered;
+class Mustache_Test_TemplateStub extends Mustache_Template
+{
+    public $rendered;
 
-	public function getMustache() {
-		return $this->mustache;
-	}
+    public function getMustache()
+    {
+        return $this->mustache;
+    }
 
-	public function renderInternal(Mustache_Context $context, $indent = '', $escape = false) {
-		return $this->rendered;
-	}
+    public function renderInternal(Mustache_Context $context, $indent = '', $escape = false)
+    {
+        return $this->rendered;
+    }
 }

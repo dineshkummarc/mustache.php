@@ -13,125 +13,141 @@
  * @group lambdas
  * @group functional
  */
-class Mustache_Test_Functional_HigherOrderSectionsTest extends PHPUnit_Framework_TestCase {
+class Mustache_Test_Functional_HigherOrderSectionsTest extends PHPUnit_Framework_TestCase
+{
 
-	private $mustache;
+    private $mustache;
 
-	public function setUp() {
-		$this->mustache = new Mustache_Mustache;
-	}
+    public function setUp()
+    {
+        $this->mustache = new Mustache_Mustache;
+    }
 
-	public function testAnonymousFunctionSectionCallback() {
-		$tpl = $this->mustache->loadTemplate('{{#wrapper}}{{name}}{{/wrapper}}');
+    public function testAnonymousFunctionSectionCallback()
+    {
+        $tpl = $this->mustache->loadTemplate('{{#wrapper}}{{name}}{{/wrapper}}');
 
-		$foo = new Mustache_Test_Functional_Foo;
-		$foo->name = 'Mario';
-		$foo->wrapper = function($text) {
-			return sprintf('<div class="anonymous">%s</div>', $text);
-		};
+        $foo = new Mustache_Test_Functional_Foo;
+        $foo->name = 'Mario';
+        $foo->wrapper = function($text) {
+            return sprintf('<div class="anonymous">%s</div>', $text);
+        };
 
-		$this->assertEquals(sprintf('<div class="anonymous">%s</div>', $foo->name), $tpl->render($foo));
-	}
+        $this->assertEquals(sprintf('<div class="anonymous">%s</div>', $foo->name), $tpl->render($foo));
+    }
 
-	public function testSectionCallback() {
-		$one = $this->mustache->loadTemplate('{{name}}');
-		$two = $this->mustache->loadTemplate('{{#wrap}}{{name}}{{/wrap}}');
+    public function testSectionCallback()
+    {
+        $one = $this->mustache->loadTemplate('{{name}}');
+        $two = $this->mustache->loadTemplate('{{#wrap}}{{name}}{{/wrap}}');
 
-		$foo = new Mustache_Test_Functional_Foo;
-		$foo->name = 'Luigi';
+        $foo = new Mustache_Test_Functional_Foo;
+        $foo->name = 'Luigi';
 
-		$this->assertEquals($foo->name, $one->render($foo));
-		$this->assertEquals(sprintf('<em>%s</em>', $foo->name), $two->render($foo));
-	}
+        $this->assertEquals($foo->name, $one->render($foo));
+        $this->assertEquals(sprintf('<em>%s</em>', $foo->name), $two->render($foo));
+    }
 
-	public function testRuntimeSectionCallback() {
-		$tpl = $this->mustache->loadTemplate('{{#doublewrap}}{{name}}{{/doublewrap}}');
+    public function testRuntimeSectionCallback()
+    {
+        $tpl = $this->mustache->loadTemplate('{{#doublewrap}}{{name}}{{/doublewrap}}');
 
-		$foo = new Mustache_Test_Functional_Foo;
-		$foo->doublewrap = array($foo, 'wrapWithBoth');
+        $foo = new Mustache_Test_Functional_Foo;
+        $foo->doublewrap = array($foo, 'wrapWithBoth');
 
-		$this->assertEquals(sprintf('<strong><em>%s</em></strong>', $foo->name), $tpl->render($foo));
-	}
+        $this->assertEquals(sprintf('<strong><em>%s</em></strong>', $foo->name), $tpl->render($foo));
+    }
 
-	public function testStaticSectionCallback() {
-		$tpl = $this->mustache->loadTemplate('{{#trimmer}}    {{name}}    {{/trimmer}}');
+    public function testStaticSectionCallback()
+    {
+        $tpl = $this->mustache->loadTemplate('{{#trimmer}}    {{name}}    {{/trimmer}}');
 
-		$foo = new Mustache_Test_Functional_Foo;
-		$foo->trimmer = array(get_class($foo), 'staticTrim');
+        $foo = new Mustache_Test_Functional_Foo;
+        $foo->trimmer = array(get_class($foo), 'staticTrim');
 
-		$this->assertEquals($foo->name, $tpl->render($foo));
-	}
+        $this->assertEquals($foo->name, $tpl->render($foo));
+    }
 
-	public function testViewArraySectionCallback() {
-		$tpl = $this->mustache->loadTemplate('{{#trim}}    {{name}}    {{/trim}}');
+    public function testViewArraySectionCallback()
+    {
+        $tpl = $this->mustache->loadTemplate('{{#trim}}    {{name}}    {{/trim}}');
 
-		$foo = new Mustache_Test_Functional_Foo;
+        $foo = new Mustache_Test_Functional_Foo;
 
-		$data = array(
-			'name' => 'Bob',
-			'trim' => array(get_class($foo), 'staticTrim'),
-		);
+        $data = array(
+            'name' => 'Bob',
+            'trim' => array(get_class($foo), 'staticTrim'),
+        );
 
-		$this->assertEquals($data['name'], $tpl->render($data));
-	}
+        $this->assertEquals($data['name'], $tpl->render($data));
+    }
 
-	public function testViewArrayAnonymousSectionCallback() {
-		$tpl = $this->mustache->loadTemplate('{{#wrap}}{{name}}{{/wrap}}');
+    public function testViewArrayAnonymousSectionCallback()
+    {
+        $tpl = $this->mustache->loadTemplate('{{#wrap}}{{name}}{{/wrap}}');
 
-		$data = array(
-			'name' => 'Bob',
-			'wrap' => function($text) {
-				return sprintf('[[%s]]', $text);
-			}
-		);
+        $data = array(
+            'name' => 'Bob',
+            'wrap' => function($text) {
+                return sprintf('[[%s]]', $text);
+            }
+        );
 
-		$this->assertEquals(sprintf('[[%s]]', $data['name']), $tpl->render($data));
-	}
+        $this->assertEquals(sprintf('[[%s]]', $data['name']), $tpl->render($data));
+    }
 
-	public function testMonsters() {
-		$tpl = $this->mustache->loadTemplate('{{#title}}{{title}} {{/title}}{{name}}');
+    public function testMonsters()
+    {
+        $tpl = $this->mustache->loadTemplate('{{#title}}{{title}} {{/title}}{{name}}');
 
-		$frank = new Mustache_Test_Functional_Monster();
-		$frank->title = 'Dr.';
-		$frank->name  = 'Frankenstein';
-		$this->assertEquals('Dr. Frankenstein', $tpl->render($frank));
+        $frank = new Mustache_Test_Functional_Monster();
+        $frank->title = 'Dr.';
+        $frank->name  = 'Frankenstein';
+        $this->assertEquals('Dr. Frankenstein', $tpl->render($frank));
 
-		$dracula = new Mustache_Test_Functional_Monster();
-		$dracula->title = 'Count';
-		$dracula->name  = 'Dracula';
-		$this->assertEquals('Count Dracula', $tpl->render($dracula));
-	}
+        $dracula = new Mustache_Test_Functional_Monster();
+        $dracula->title = 'Count';
+        $dracula->name  = 'Dracula';
+        $this->assertEquals('Count Dracula', $tpl->render($dracula));
+    }
 }
 
-class Mustache_Test_Functional_Foo {
-	public $name = 'Justin';
-	public $lorem = 'Lorem ipsum dolor sit amet,';
-	public $wrap;
+class Mustache_Test_Functional_Foo
+{
+    public $name = 'Justin';
+    public $lorem = 'Lorem ipsum dolor sit amet,';
+    public $wrap;
 
-	public function __construct() {
-		$this->wrap = function($text) {
-			return sprintf('<em>%s</em>', $text);
-		};
-	}
+    public function __construct()
+    {
+        $this->wrap = function($text) {
+            return sprintf('<em>%s</em>', $text);
+        };
+    }
 
-	public function wrapWithEm($text) {
-		return sprintf('<em>%s</em>', $text);
-	}
+    public function wrapWithEm($text)
+    {
+        return sprintf('<em>%s</em>', $text);
+    }
 
-	public function wrapWithStrong($text) {
-		return sprintf('<strong>%s</strong>', $text);
-	}
+    public function wrapWithStrong($text)
+    {
+        return sprintf('<strong>%s</strong>', $text);
+    }
 
-	public function wrapWithBoth($text) {
-		return self::wrapWithStrong(self::wrapWithEm($text));
-	}
+    public function wrapWithBoth($text)
+    {
+        return self::wrapWithStrong(self::wrapWithEm($text));
+    }
 
-	public static function staticTrim($text) {
-		return trim($text);
-	}
+    public static function staticTrim($text)
+    {
+        return trim($text);
+    }
 }
 
-class Mustache_Test_Functional_Monster {
-	public $title;
-	public $name;
+class Mustache_Test_Functional_Monster
+{
+    public $title;
+    public $name;
 }

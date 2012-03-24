@@ -9,8 +9,10 @@
  * file that was distributed with this source code.
  */
 
-class Mustache_Test_HelperCollectionTest extends PHPUnit_Framework_TestCase {
-	public function testConstructor() {
+class Mustache_Test_HelperCollectionTest extends PHPUnit_Framework_TestCase
+{
+	public function testConstructor()
+    {
 		$foo = function() { echo 'foo'; };
 		$bar = 'BAR';
 
@@ -23,7 +25,8 @@ class Mustache_Test_HelperCollectionTest extends PHPUnit_Framework_TestCase {
 		$this->assertSame($bar, $helpers->get('bar'));
 	}
 
-	public function testAccessorsAndMutators() {
+	public function testAccessorsAndMutators()
+    {
 		$foo = function() { echo 'foo'; };
 		$bar = 'BAR';
 
@@ -48,7 +51,8 @@ class Mustache_Test_HelperCollectionTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($helpers->has('bar'));
     }
 
-    public function testMagicMethods() {
+    public function testMagicMethods()
+    {
         $foo = function() { echo 'foo'; };
         $bar = 'BAR';
 
@@ -84,7 +88,8 @@ class Mustache_Test_HelperCollectionTest extends PHPUnit_Framework_TestCase {
     /**
      * @dataProvider getInvalidHelperArguments
      */
-    public function testHelperCollectionIsntAfraidToThrowExceptions($helpers = array(), $actions = array(), $exception = null) {
+    public function testHelperCollectionIsntAfraidToThrowExceptions($helpers = array(), $actions = array(), $exception = null)
+    {
         if ($exception) {
             $this->setExpectedException($exception);
         }
@@ -96,7 +101,8 @@ class Mustache_Test_HelperCollectionTest extends PHPUnit_Framework_TestCase {
         }
     }
 
-    public function getInvalidHelperArguments() {
+    public function getInvalidHelperArguments()
+    {
         return array(
             array(
                 'not helpers',

@@ -12,18 +12,21 @@
 /**
  * @group unit
  */
-class Mustache_Test_MustacheTest extends PHPUnit_Framework_TestCase {
+class Mustache_Test_MustacheTest extends PHPUnit_Framework_TestCase
+{
 
 	private static $tempDir;
 
-	public static function setUpBeforeClass() {
+	public static function setUpBeforeClass()
+	{
 		self::$tempDir = sys_get_temp_dir() . '/mustache_test';
 		if (file_exists(self::$tempDir)) {
 			self::rmdir(self::$tempDir);
 		}
 	}
 
-	public function testConstructor() {
+	public function testConstructor()
+	{
 		$loader         = new Mustache_Loader_StringLoader;
 		$partialsLoader = new Mustache_Loader_ArrayLoader;
 		$mustache       = new Mustache_Mustache(array(
@@ -53,7 +56,8 @@ class Mustache_Test_MustacheTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse($mustache->hasHelper('baz'));
 	}
 
-	public function testRender() {
+	public function testRender()
+	{
 		$source = '{{ foo }}';
 		$data   = array('bar' => 'baz');
 		$output = 'TEH OUTPUT';
@@ -74,7 +78,8 @@ class Mustache_Test_MustacheTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($source, $mustache->source);
 	}
 
-	public function testSettingServices() {
+	public function testSettingServices()
+	{
 		$loader    = new Mustache_Loader_StringLoader;
 		$tokenizer = new Mustache_Tokenizer;
 		$parser    = new Mustache_Parser;
@@ -105,7 +110,8 @@ class Mustache_Test_MustacheTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @group functional
 	 */
-	public function testCache() {
+	public function testCache()
+	{
 		$mustache = new Mustache_Mustache(array(
 			'template_class_prefix' => '__whot__',
 			'cache' => self::$tempDir,
@@ -124,11 +130,13 @@ class Mustache_Test_MustacheTest extends PHPUnit_Framework_TestCase {
 	 * @expectedException \InvalidArgumentException
 	 * @dataProvider getBadEscapers
 	 */
-	public function testNonCallableEscapeThrowsException($escape) {
+	public function testNonCallableEscapeThrowsException($escape)
+	{
 		new Mustache_Mustache(array('escape' => $escape));
 	}
 
-	public function getBadEscapers() {
+	public function getBadEscapers()
+	{
 		return array(
 			array('nothing'),
 			array('foo', 'bar'),
@@ -138,7 +146,8 @@ class Mustache_Test_MustacheTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @expectedException \RuntimeException
 	 */
-	public function testImmutablePartialsLoadersThrowException() {
+	public function testImmutablePartialsLoadersThrowException()
+	{
 		$mustache = new Mustache_Mustache(array(
 			'partials_loader' => new Mustache_Loader_StringLoader,
 		));
@@ -146,7 +155,8 @@ class Mustache_Test_MustacheTest extends PHPUnit_Framework_TestCase {
 		$mustache->setPartials(array('foo' => '{{ foo }}'));
 	}
 
-	public function testHelpers() {
+	public function testHelpers()
+	{
 		$foo = function() { return 'foo'; };
 		$bar = 'BAR';
 		$mustache = new Mustache_Mustache(array('helpers' => array(
@@ -184,12 +194,14 @@ class Mustache_Test_MustacheTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * @expectedException \InvalidArgumentException
 	 */
-	public function testSetHelpersThrowsExceptions() {
+	public function testSetHelpersThrowsExceptions()
+	{
 		$mustache = new Mustache_Mustache;
 		$mustache->setHelpers('monkeymonkeymonkey');
 	}
 
-	private static function rmdir($path) {
+	private static function rmdir($path)
+	{
 		$path = rtrim($path, '/').'/';
 		$handle = opendir($path);
 		while (($file = readdir($handle)) !== false) {
@@ -210,10 +222,12 @@ class Mustache_Test_MustacheTest extends PHPUnit_Framework_TestCase {
 	}
 }
 
-class MustacheStub extends Mustache_Mustache {
+class MustacheStub extends Mustache_Mustache
+{
 	public $source;
 	public $template;
-	public function loadTemplate($source) {
+	public function loadTemplate($source)
+	{
 		$this->source = $source;
 
 		return $this->template;
